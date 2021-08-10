@@ -8,14 +8,19 @@ const io = new Server(httpServer, {
   }
 })
 
+interface Message {
+  id: number
+  content: string
+}
+
 io.on('connection', (socket: Socket) => {
   console.log('connection made: ', socket.id)
 
-  socket.on('message', ({ value }: { value: string }) => {
-    io.emit('message', { value })
+  socket.on('message', (message: Message) => {
+    io.emit('message', message)
   })
 })
 
-httpServer.listen(3030, () => {
-  console.log('listening on port 3030')
+httpServer.listen(8080, () => {
+  console.log('listening on port 8080')
 })
