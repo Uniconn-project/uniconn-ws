@@ -8,9 +8,15 @@ const io = new Server(httpServer, {
   }
 })
 
+interface Profile {
+  id: number
+}
+
 interface Message {
   id: number
+  sender: Profile
   content: string
+  timestamp: Date
 }
 
 io.on('connection', (socket: Socket) => {
