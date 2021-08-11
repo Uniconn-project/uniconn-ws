@@ -27,6 +27,6 @@ io.on('connection', (socket: Socket) => {
   })
 })
 
-httpServer.listen(8080, () => {
-  console.log('listening on port 8080')
+httpServer.listen(3030, () => {
+  console.log('listening on port 3030')
 })
