@@ -4,7 +4,7 @@ import { Server, Socket } from 'socket.io'
 const httpServer = createServer()
 const io = new Server(httpServer, {
   cors: {
-    origin: 'http://localhost:3000'
+    origin: ['http://localhost:3000', 'http://localhost:1234']
   }
 })
 
@@ -15,15 +15,30 @@ interface Profile {
 interface Message {
   id: number
   sender: Profile
+  receiver: Profile
   content: string
   timestamp: Date
 }
 
+interface SocketIdMap {
+  [key: number]: string
+}
+
+const socketIdMap: SocketIdMap = {}
+
 io.on('connection', (socket: Socket) => {
   console.log('connection made: ', socket.id)
 
+  socket.on('profile-id', (id: number) => {
+    socketIdMap[id] = socket.id
+    console.log('profile-id: ', socketIdMap)
+  })
+
   socket.on('message', (message: Message) => {
-    io.emit('message', message)
+    socket
+      .to(socketIdMap[message.sender.id])
+      .to(socketIdMap[message.receiver.id])
+      .emit('message', message)
   })
 })
 
