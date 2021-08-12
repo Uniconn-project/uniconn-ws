@@ -27,7 +27,7 @@ interface SocketIdMap {
 const socketIdMap: SocketIdMap = {}
 
 io.on('connection', (socket: Socket) => {
-  console.log('connection made: ', socket.id)
+  console.log('connection made: ', socket.id, io.sockets.sockets.size)
 
   socket.on('profile-id', (id: number) => {
     socketIdMap[id] = socket.id
@@ -35,10 +35,11 @@ io.on('connection', (socket: Socket) => {
   })
 
   socket.on('message', (message: Message) => {
-    socket
-      .to(socketIdMap[message.sender.id])
-      .to(socketIdMap[message.receiver.id])
-      .emit('message', message)
+    socket.to(socketIdMap[message.receiver.id]).emit('message', message)
+  })
+
+  socket.on('disconnect', () => {
+    console.log('disconnected: ', socket.id, io.sockets.sockets.size)
   })
 })
 
