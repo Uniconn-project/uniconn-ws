@@ -4,7 +4,12 @@ import { Server, Socket } from 'socket.io'
 const httpServer = createServer()
 const io = new Server(httpServer, {
   cors: {
-    origin: ['http://localhost:3000', 'http://localhost:1234']
+    origin: [
+      'http://127.0.0.1:3000',
+      'http://127.0.0.1:1234',
+      'http://localhost:3000',
+      'http://localhost:1234'
+    ]
   }
 })
 
