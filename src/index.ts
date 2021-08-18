@@ -13,25 +13,29 @@ const io = new Server(httpServer, {
   }
 })
 
-interface Message {
-  chatId: number
-  senderId: number
-  content: string
-}
-
 io.on('connection', (socket: Socket) => {
-  console.log('connected: ', socket.id, io.sockets.sockets.size)
+  console.log(
+    `connected: ${socket.id}`,
+    '|',
+    `total connections: ${io.sockets.sockets.size}`
+  )
 
   socket.on('join-room', (chatId: number) => {
     socket.join(chatId.toString())
+    console.log(`${socket.id} joined room ${chatId}`)
   })
 
-  socket.on('message', (message: Message) => {
-    socket.to(message.chatId.toString()).to(socket.id).emit('message', message)
+  socket.on('message', (chatId: number) => {
+    socket.to(chatId.toString()).emit('message')
+    socket.emit('message')
   })
 
   socket.on('disconnect', () => {
-    console.log('disconnected: ', socket.id, io.sockets.sockets.size)
+    console.log(
+      `disconnected: ${socket.id}`,
+      '|',
+      `total connections: ${io.sockets.sockets.size}`
+    )
   })
 })
 
