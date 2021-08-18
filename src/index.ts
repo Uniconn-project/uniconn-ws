@@ -13,34 +13,21 @@ const io = new Server(httpServer, {
   }
 })
 
-interface Profile {
-  id: number
-}
-
 interface Message {
-  id: number
-  sender: Profile
-  receiver: Profile
+  chatId: number
+  senderId: number
   content: string
-  timestamp: Date
 }
-
-interface SocketIdMap {
-  [key: number]: string
-}
-
-const socketIdMap: SocketIdMap = {}
 
 io.on('connection', (socket: Socket) => {
-  console.log('connection made: ', socket.id, io.sockets.sockets.size)
+  console.log('connected: ', socket.id, io.sockets.sockets.size)
 
-  socket.on('profile-id', (id: number) => {
-    socketIdMap[id] = socket.id
-    console.log('profile-id: ', socketIdMap)
+  socket.on('join-room', (chatId: number) => {
+    socket.join(chatId.toString())
   })
 
   socket.on('message', (message: Message) => {
-    socket.to(socketIdMap[message.receiver.id]).emit('message', message)
+    socket.to(message.chatId.toString()).to(socket.id).emit('message', message)
   })
 
   socket.on('disconnect', () => {
