@@ -20,14 +20,29 @@ io.on('connection', (socket: Socket) => {
     `total connections: ${io.sockets.sockets.size}`
   )
 
-  socket.on('join-room', (chatId: number) => {
-    socket.join(chatId.toString())
-    console.log(`${socket.id} joined room ${chatId}`)
+  socket.on('initialize', (myProfileId: number) => {
+    socket.join(myProfileId.toString())
+    console.log(`${socket.id} joined room ${myProfileId}`)
   })
 
-  socket.on('message', (chatId: number) => {
-    socket.to(chatId.toString()).emit('message')
-    socket.emit('message')
+  socket.on('message', (profileIds: number[], chatId: number) => {
+    for (let profileId of profileIds) {
+      socket.to(profileId.toString()).emit('message', chatId)
+    }
+    socket.emit('message', chatId)
+  })
+
+  socket.on('message-vizualization', (profileIds: number[], myProfileId: number, chatId: number) => {
+    for (let profileId of profileIds) {
+      socket.to(profileId.toString()).emit('message-vizualization', {viewerProfileId: myProfileId, chatId})
+    }
+    socket.emit('message-vizualization', {viewerProfileId: myProfileId, chatId})
+  })
+
+  socket.on('notification', (profileIds: number[]) => {
+    for (let profileId of profileIds) {
+      socket.to(profileId.toString()).emit('notification')
+    }
   })
 
   socket.on('disconnect', () => {
