@@ -32,11 +32,11 @@ io.on('connection', (socket: Socket) => {
     socket.emit('message', chatId)
   })
 
-  socket.on('message-vizualization', (profileIds: number[], myProfileId: number, chatId: number) => {
+  socket.on('message-visualization', (profileIds: number[], chatId: number) => {
     for (let profileId of profileIds) {
-      socket.to(profileId.toString()).emit('message-vizualization', {viewerProfileId: myProfileId, chatId})
+    socket.to(profileId.toString()).emit('message-visualization', chatId)
     }
-    socket.emit('message-vizualization', {viewerProfileId: myProfileId, chatId})
+    socket.emit('message-visualization', chatId)
   })
 
   socket.on('notification', (profileIds: number[]) => {
