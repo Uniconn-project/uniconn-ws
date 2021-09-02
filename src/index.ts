@@ -26,21 +26,30 @@ io.on('connection', (socket: Socket) => {
   })
 
   socket.on('message', (profileIds: number[], chatId: number) => {
-    for (let profileId of profileIds) {
+    for (const profileId of profileIds) {
       socket.to(profileId.toString()).emit('message', chatId)
     }
     socket.emit('message', chatId)
   })
 
-  socket.on('message-vizualization', (profileIds: number[], myProfileId: number, chatId: number) => {
-    for (let profileId of profileIds) {
-      socket.to(profileId.toString()).emit('message-vizualization', {viewerProfileId: myProfileId, chatId})
+  socket.on(
+    'message-vizualization',
+    (profileIds: number[], myProfileId: number, chatId: number) => {
+      for (const profileId of profileIds) {
+        socket.to(profileId.toString()).emit('message-vizualization', {
+          viewerProfileId: myProfileId,
+          chatId
+        })
+      }
+      socket.emit('message-vizualization', {
+        viewerProfileId: myProfileId,
+        chatId
+      })
     }
-    socket.emit('message-vizualization', {viewerProfileId: myProfileId, chatId})
-  })
+  )
 
   socket.on('notification', (profileIds: number[]) => {
-    for (let profileId of profileIds) {
+    for (const profileId of profileIds) {
       socket.to(profileId.toString()).emit('notification')
     }
   })
