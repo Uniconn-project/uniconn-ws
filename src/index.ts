@@ -32,12 +32,34 @@ io.on('connection', (socket: Socket) => {
     socket.emit('message', chatId)
   })
 
-  socket.on('message-visualization', (profileIds: number[], chatId: number) => {
-    for (const profileId of profileIds) {
-      socket.to(profileId.toString()).emit('message-visualization', chatId)
+  socket.on(
+    'message-visualization',
+    (viewerProfileId: number, profileIds: number[], chatId: number) => {
+      for (const profileId of profileIds) {
+        socket
+          .to(profileId.toString())
+          .emit('message-visualization', { viewerProfileId, chatId })
+      }
+      socket.emit('message-visualization', { viewerProfileId, chatId })
     }
-    socket.emit('message-visualization', chatId)
-  })
+  )
+
+  socket.on(
+    'message-typing',
+    (
+      boolean: boolean,
+      typerProfileId: number,
+      profileIds: number[],
+      chatId: number
+    ) => {
+      for (const profileId of profileIds) {
+        socket
+          .to(profileId.toString())
+          .emit('message-typing', { boolean, typerProfileId, chatId })
+      }
+      socket.emit('message-typing', { boolean, typerProfileId, chatId })
+    }
+  )
 
   socket.on('notification', (profileIds: number[]) => {
     for (const profileId of profileIds) {
