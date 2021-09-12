@@ -47,7 +47,6 @@ io.on('connection', (socket: Socket) => {
   socket.on(
     'message-typing',
     (
-      boolean: boolean,
       typerProfileId: number,
       profileIds: number[],
       chatId: number
@@ -55,9 +54,9 @@ io.on('connection', (socket: Socket) => {
       for (const profileId of profileIds) {
         socket
           .to(profileId.toString())
-          .emit('message-typing', { boolean, typerProfileId, chatId })
+          .emit('message-typing', { typerProfileId, chatId })
       }
-      socket.emit('message-typing', { boolean, typerProfileId, chatId })
+      socket.emit('message-typing', { typerProfileId, chatId })
     }
   )
 
