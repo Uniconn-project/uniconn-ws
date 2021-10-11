@@ -2,10 +2,9 @@ name: CI to Docker Hub
 
 on:
   push:
-    branches: [ production ]
+    branches: [master]
 
 jobs:
-
   build:
     runs-on: ubuntu-latest
 
@@ -17,7 +16,7 @@ jobs:
           key: ${{ runner.os }}-buildx-${{ github.sha }}
           restore-keys: |
             ${{ runner.os }}-buildx-
-      - name: Check Out Repo 
+      - name: Check Out Repo
         uses: actions/checkout@v2
 
       - name: Login to Docker Hub
@@ -38,7 +37,7 @@ jobs:
           file: ./Dockerfile
           builder: ${{ steps.buildx.outputs.name }}
           push: true
-          tags: uniconn/websockets:prod
+          tags: uniconn/websockets
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
 
