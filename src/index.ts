@@ -6,9 +6,10 @@ const io = new Server(httpServer, {
   cors: {
     origin: [
       'http://127.0.0.1:3000',
-      'http://127.0.0.1:1234',
       'http://localhost:3000',
-      'http://localhost:1234'
+      'http://127.0.0.1:1234',
+      'http://localhost:1234',
+      'https://uniconn-web.herokuapp.com'
     ]
   }
 })
@@ -46,11 +47,7 @@ io.on('connection', (socket: Socket) => {
 
   socket.on(
     'message-typing',
-    (
-      typerProfileId: number,
-      profileIds: number[],
-      chatId: number
-    ) => {
+    (typerProfileId: number, profileIds: number[], chatId: number) => {
       for (const profileId of profileIds) {
         socket
           .to(profileId.toString())

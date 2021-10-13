@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "nodemon -L src/index.ts",
     "build": "rimraf ./build && tsc",
-    "start": "npm run build && node build/index.js"
+    "start": "npm run build && node build/index.js -p $PORT"
   },
   "repository": {
     "type": "git",
