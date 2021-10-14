@@ -13,7 +13,7 @@ const io = new Server(httpServer, {
       'http://localhost:3000',
       'http://127.0.0.1:1234',
       'http://localhost:1234',
-      'https://uniconn-web.herokuapp.com'
+      'https://uniconn-web.vercel.app'
     ]
   }
 })
