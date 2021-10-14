@@ -1,9 +1,11 @@
+import express from 'express'
 import { createServer } from 'http'
 import { Server, Socket } from 'socket.io'
 
 const PORT = process.env.PORT || 3030
 
-const httpServer = createServer()
+const app = express()
+const httpServer = createServer(app)
 const io = new Server(httpServer, {
   cors: {
     origin: [
@@ -15,6 +17,10 @@ const io = new Server(httpServer, {
     ]
   }
 })
+
+/* app.get('/', (req, res) => {
+  res.sendFile(__dirname + '/index.html')
+}) */
 
 io.on('connection', (socket: Socket) => {
   console.log(
