@@ -1,23 +1,25 @@
 import express from 'express'
+import cors, { CorsOptions } from 'cors'
 import { Server, Socket } from 'socket.io'
 
 const PORT = process.env.PORT || 3030
 
+const allowedOrigins = [
+  'http://127.0.0.1:3000',
+  'http://localhost:3000',
+  'http://127.0.0.1:1234',
+  'http://localhost:1234',
+  'https://uniconn-web.vercel.app'
+]
+const options: CorsOptions = {
+  origin: allowedOrigins
+}
+
 const server = express()
-  .use((req, res) => res.sendFile('/index.html', { root: __dirname }))
+  .use(cors(options))
   .listen(PORT, () => console.log(`Listening on ${PORT}`))
 
-const io = new Server(server, {
-  cors: {
-    origin: [
-      'http://127.0.0.1:3000',
-      'http://localhost:3000',
-      'http://127.0.0.1:1234',
-      'http://localhost:1234',
-      'https://uniconn-web.vercel.app'
-    ]
-  }
-})
+const io = new Server(server)
 
 io.on('connection', (socket: Socket) => {
   console.log(
