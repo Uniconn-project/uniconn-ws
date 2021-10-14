@@ -1,12 +1,13 @@
 import express from 'express'
-import { createServer } from 'http'
 import { Server, Socket } from 'socket.io'
 
 const PORT = process.env.PORT || 3030
 
-const app = express()
-const httpServer = createServer(app)
-const io = new Server(httpServer, {
+const server = express()
+  .use((req, res) => res.sendFile('/index.html', { root: __dirname }))
+  .listen(PORT, () => console.log(`Listening on ${PORT}`))
+
+const io = new Server(server, {
   cors: {
     origin: [
       'http://127.0.0.1:3000',
@@ -17,10 +18,6 @@ const io = new Server(httpServer, {
     ]
   }
 })
-
-/* app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/index.html')
-}) */
 
 io.on('connection', (socket: Socket) => {
   console.log(
@@ -78,8 +75,4 @@ io.on('connection', (socket: Socket) => {
       `total connections: ${io.sockets.sockets.size}`
     )
   })
-})
-
-httpServer.listen(PORT, () => {
-  console.log(`listening on port ${PORT}`)
 })
