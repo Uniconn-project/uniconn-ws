@@ -1,6 +1,8 @@
 import { createServer } from 'http'
 import { Server, Socket } from 'socket.io'
 
+const PORT = process.env.PORT || 3030
+
 const httpServer = createServer()
 const io = new Server(httpServer, {
   cors: {
@@ -72,6 +74,6 @@ io.on('connection', (socket: Socket) => {
   })
 })
 
-httpServer.listen(3030, () => {
-  console.log('listening on port 3030')
+httpServer.listen(PORT, () => {
+  console.log(`listening on port ${PORT}`)
 })
