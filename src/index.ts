@@ -12,14 +12,18 @@ const allowedOrigins = [
   'http://localhost:1234'
 ]
 const options: CorsOptions = {
-  origin: 'https://uniconn-web.vercel.app'
+  origin: allowedOrigins
 }
 
 const server = express()
   .use(cors(options))
   .listen(PORT, () => console.log(`Listening on ${PORT}`))
 
-const io = new Server(server)
+const io = new Server(server, {
+  cors: {
+    origin: allowedOrigins
+  }
+})
 
 io.on('connection', (socket: Socket) => {
   console.log(
