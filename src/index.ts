@@ -5,14 +5,14 @@ import { Server, Socket } from 'socket.io'
 const PORT = process.env.PORT || 3030
 
 const allowedOrigins = [
+  'https://uniconn-web.vercel.app',
   'http://127.0.0.1:3000',
   'http://localhost:3000',
   'http://127.0.0.1:1234',
-  'http://localhost:1234',
-  'https://uniconn-web.vercel.app'
+  'http://localhost:1234'
 ]
 const options: CorsOptions = {
-  origin: allowedOrigins
+  origin: 'https://uniconn-web.vercel.app'
 }
 
 const server = express()
